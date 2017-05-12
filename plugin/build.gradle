@@ -67,7 +67,7 @@ bintray {
     publications = ['mavenJava']
     configurations = ['archives']
     pkg {
-        repo = 'maven'
+        repo = 'com.github.sedovalx'
         name = 'com.github.sedovalx.gradle-aspectj-binary'
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/sedovalx/gradle-aspectj-binary'
