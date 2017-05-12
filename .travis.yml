@@ -1,0 +1,10 @@
+language: java
+jdk: oraclejdk7
+sudo: false
+
+branches:
+ only:
+  - master
+
+script:
+ - ./gradlew clean build
