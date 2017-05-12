@@ -1,5 +1,6 @@
 group 'com.github.sedovalx.gradle'
-version '1.0-SNAPSHOT'
+def buildNumber = System.getProperty("TRAVIS_BUILD_NUMBER")
+version  buildNumber != null ? "1.0.$buildNumber" : '1.0-SNAPSHOT'
 
 buildscript {
     ext {
@@ -9,15 +10,18 @@ buildscript {
 
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 
 repositories {
     mavenCentral()
@@ -30,10 +34,48 @@ dependencies {
     compile "commons-io:commons-io:2.5"
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            artifactId 'gradle-aspectj-binary'
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Gradle AspectJ binary weaving plugin')
+                root.appendNode('name', 'Gradle AspectJ binary weaving plugin')
+                root.appendNode('url', 'https://github.com/sedovalx/gradle-aspectj-binary')
+            }
         }
     }
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['mavenJava']
+    configurations = ['archives']
+    pkg {
+        repo = 'maven'
+        name = 'com.github.sedovalx.gradle-aspectj-binary'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/sedovalx/gradle-aspectj-binary'
+        version {
+            name = "1.0.$buildNumber"
+            desc = 'Gradle AspectJ binary weaving plugin'
+            released = new Date()
+        }
+    }
+
 }
