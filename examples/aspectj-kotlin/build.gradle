@@ -35,4 +35,5 @@ dependencies {
     compile "org.aspectj:aspectjweaver:$aspectjVersion"
 }
 
+weaveClasses.dependsOn compileJava
 classes.dependsOn weaveClasses
