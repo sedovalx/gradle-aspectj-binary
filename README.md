@@ -27,3 +27,14 @@ doing the weaving on the weaving over already compiled classes. It is particular
   
   so you can just run the build and have all your aspects in the `main` source set applied.
   
+### Thing to remember
+   
+  You need to weave both aspects and classes where aspects should be applied. So if you have aspect 
+  classes in a project A and classes to be weaved in a project B you should add the `weaveClasses` task to the build 
+  process of both projects.
+  
+## TODO
+  - [ ] Add travis build
+  - [ ] Add task to publish to Maven Central
+  - [ ] Release 0.1
+  
