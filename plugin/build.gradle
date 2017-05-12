@@ -1,5 +1,5 @@
 group 'com.github.sedovalx.gradle'
-def buildNumber = System.getProperty("BUILD_NUMBER")
+def buildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
 version  buildNumber != null ? "1.0.$buildNumber" : '1.0-SNAPSHOT'
 
 buildscript {
