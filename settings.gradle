@@ -1,1 +1,1 @@
-include 'plugin'//, 'examples:aspectj-kotlin'
+include 'plugin', 'examples:aspectj-kotlin'
