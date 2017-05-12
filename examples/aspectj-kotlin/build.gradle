@@ -6,12 +6,12 @@ buildscript {
     ext.aspectjVersion = '1.8.10'
 
     repositories {
-        mavenLocal()
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.github.sedovalx.gradle:gradle-aspectj-binary:1.0-SNAPSHOT"
+        classpath "com.github.sedovalx.gradle:gradle-aspectj-binary:1.0.7"
     }
 }
 
