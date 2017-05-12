@@ -22,6 +22,7 @@ doing the weaving on the weaving over already compiled classes. It is particular
       
   `weaveClasses` task becomes available after that. It makes sense to add it as a dependency for the `classes` task
   
+      weaveClasses.dependsOn compileJava
       classes.dependsOn weaveClasses
   
   so you can just run the build and have all your aspects in the `main` source set applied.
