@@ -38,7 +38,8 @@ doing the weaving on the weaving over already compiled classes. It is particular
   process of both projects.
   
 ## TODO
-  - [ ] Add travis build
-  - [ ] Add task to publish to Maven Central
-  - [ ] Release 0.1
+  - [x] Add travis build
+  - [x] Add task to publish to Bintray
+  - [x] Release 1.0.1
+  - [ ] Describe dependency configuration
   
