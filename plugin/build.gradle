@@ -65,7 +65,6 @@ bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_KEY')
     publications = ['mavenJava']
-    configurations = ['archives']
     pkg {
         repo = 'com.github.sedovalx'
         name = 'com.github.sedovalx.gradle-aspectj-binary'
