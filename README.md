@@ -5,7 +5,8 @@ doing the weaving on the weaving over already compiled classes. It is particular
   fully compatible Java bytecode. As far as I know there was a problem with Kotlin inlining in AspectJ 1.8.9, that 
    was fixed in the 1.8.10, so the later is used.
   
-###Usage
+### Usage
+
   Here is an example project in the `examples` folder. Basically you need to add the plugin to your build script
   
       buildscript {
