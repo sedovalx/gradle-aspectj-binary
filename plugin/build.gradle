@@ -71,6 +71,7 @@ bintray {
         name = 'com.github.sedovalx.gradle-aspectj-binary'
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/sedovalx/gradle-aspectj-binary'
+        publicDownloadNumbers = true
         version {
             name = "1.0.$buildNumber"
             desc = 'Gradle AspectJ binary weaving plugin'
