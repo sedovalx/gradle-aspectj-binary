@@ -15,7 +15,7 @@ doing the weaving on the weaving over already compiled classes. It is particular
   
       buildscript {
         repositories {
-          mavenCentral()
+          jcenter()
         }
         dependencies {
           classpath "com.github.sedovalx.gradle:gradle-aspectj-binary:$pluginVersion"
@@ -31,6 +31,15 @@ doing the weaving on the weaving over already compiled classes. It is particular
   
   so you can just run the build and have all your aspects in the `main` source set applied.
   
+### Available configuration
+  
+  For now the `weaceClasses` task can be configured two parameters
+  
+      weaveClasses {
+        source = '1.7'  // default value
+        target = '1.7'  // default value
+      }
+  
 ### Thing to remember
    
   You need to weave both aspects and classes where aspects should be applied. So if you have aspect 
@@ -41,5 +50,4 @@ doing the weaving on the weaving over already compiled classes. It is particular
   - [x] Add travis build
   - [x] Add task to publish to Bintray
   - [x] Release 1.0.1
-  - [ ] Describe dependency configuration
   
