@@ -3,6 +3,7 @@ package com.github.sedovalx.gradle.aspectj
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
 import org.aspectj.bridge.IMessage
+import org.aspectj.bridge.IMessageHolder
 import org.aspectj.tools.ajc.Main
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
@@ -26,6 +27,7 @@ open class AjcTask : DefaultTask() {
     // Task properties
     var source: String = "1.7"
     var target: String = "1.7"
+    var writeToLog: Boolean = false
 
     @TaskAction
     fun compile() {
@@ -61,9 +63,6 @@ open class AjcTask : DefaultTask() {
                 "-encoding",
                 "UTF-8",
                 "-time",
-                "-log",
-                logPath.toString(),
-                "-showWeaveInfo",
                 "-warn:constructorName",
                 "-warn:packageDefaultMethod",
                 "-warn:deprecation",
@@ -73,7 +72,12 @@ open class AjcTask : DefaultTask() {
                 "-warn:unusedImports",
                 "-warn:syntheticAccess",
                 "-warn:assertIdentifier"
-        )
+        ).let {
+            if (writeToLog) {
+                it.plus("-log").plus(logPath.toString()).plus("-showWeaveInfo")
+            } else it
+        }
+
         logger.debug("About to run ajc with parameters: \n${ajcParams.toList().joinToString("\t\n")}")
 
         val currentClasspath = (Thread.currentThread().contextClassLoader as? URLClassLoader)?.urLs?.map { it.path }?.joinToString("\n")
@@ -82,9 +86,8 @@ open class AjcTask : DefaultTask() {
         }
 
         val msgHolder = try {
-            val main = Main()
-            MsgHolder(logger).apply {
-                main.run(ajcParams, this)
+            MsgHolder().apply {
+                Main().run(ajcParams, this)
             }
         } catch (ex: Exception) {
             throw GradleException("Error running task", ex)
@@ -98,16 +101,23 @@ open class AjcTask : DefaultTask() {
             throw GradleException("Failed to copy files and clean temp", ex)
         }
 
-        logger.info("ajc result: %d file(s) processed, %d pointcut(s) woven, %d error(s), %d warning(s)".format(
-                files(sourceSet.output.classesDir).size,
-               msgHolder.numMessages(IMessage.WEAVEINFO, false),
-               msgHolder.numMessages(IMessage.ERROR, true),
-               msgHolder.numMessages(IMessage.WARNING, false)
-        ))
+        if (writeToLog) {
+            logger.info("See $logPath for the Ajc log messages")
+        } else {
+            logger.info("ajc result: %d file(s) processed, %d pointcut(s) woven, %d error(s), %d warning(s)".format(
+                    files(sourceSet.output.classesDir).size,
+                    msgHolder.numMessages(IMessage.WEAVEINFO, false),
+                    msgHolder.numMessages(IMessage.ERROR, true),
+                    msgHolder.numMessages(IMessage.WARNING, false)
+            ))
 
-        if (msgHolder.hasAnyMessage(IMessage.ERROR, greater = true)) {
-            throw GradleException("AJC failed, see messages above. You can run the task with --info or --debug " +
-                    "parameters to get more detailed output. Ajc log is stored in the $logPath file.")
+            msgHolder.logIfAny(LogLevel.ERROR, IMessage.ERROR, greater = true)
+            msgHolder.logIfAny(LogLevel.WARN, IMessage.WARNING, greater = false)
+
+            if (msgHolder.hasAnyMessage(IMessage.ERROR, greater = true)) {
+                throw GradleException("Ajc failed, see messages above. You can run the task with --info or --debug " +
+                        "parameters to get more detailed output.")
+            }
         }
     }
 
@@ -124,4 +134,10 @@ open class AjcTask : DefaultTask() {
         return (sourceSet.compileClasspath + sourceSet.runtimeClasspath).asPath
     }
 
+    private fun IMessageHolder.logIfAny(logLevel: LogLevel, kind: IMessage.Kind, greater: Boolean) {
+        if (hasAnyMessage(kind, greater)) {
+            val message = getMessages(kind, greater).joinToString("\n * ", prefix = "\n$logLevel:\n * ")
+            logger.log(logLevel, message)
+        }
+    }
 }

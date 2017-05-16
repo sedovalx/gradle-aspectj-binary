@@ -39,13 +39,20 @@ doing the weaving on the weaving over already compiled classes. It is particular
   
 ### Available configuration
   
-  For now the `weaceClasses` task can be configured with two parameters
+  For now the `weaceClasses` task can be configured with the next parameters
   
       weaveClasses {
-        source = '1.7'  // default value
-        target = '1.7'  // default value
+        source = '1.7'  
+        target = '1.7'  
+        writeToLog = true 
       }
       
-  Provided values are passed as it is to the [ajc](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html) compiler parameters.   
+  Parameters:
+  - `source` has '1.7' as default value and is passed as it is to the [ajc](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html) compiler parameter
+  - `target` has '1.7' as default value and is passed as it is to the [ajc](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html) compiler parameter
+  - `writeToLog` has `false` as a default value and defines if ajc's compile messages should 
+  affect the build process. In case of value is `true` all the messages are written in the 
+  `build/ajc.log` file and do not affect the build result. Otherwise, error or warning messages are 
+  printed in the build output and ajc errors (if any) break the build process.   
 
   

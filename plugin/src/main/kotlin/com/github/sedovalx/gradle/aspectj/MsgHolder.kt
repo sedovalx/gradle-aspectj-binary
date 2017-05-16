@@ -2,10 +2,9 @@ package com.github.sedovalx.gradle.aspectj
 
 import org.aspectj.bridge.IMessage
 import org.aspectj.bridge.IMessageHolder
-import org.gradle.api.logging.Logger
 import java.util.concurrent.CopyOnWriteArrayList
 
-class MsgHolder(private val logger: Logger) : IMessageHolder {
+class MsgHolder : IMessageHolder {
     /**
      * All messages seen so far.
      */
@@ -33,15 +32,6 @@ class MsgHolder(private val logger: Logger) : IMessageHolder {
     }
 
     override fun handleMessage(msg: IMessage): Boolean {
-        if (msg.kind == IMessage.ERROR
-                || msg.kind == IMessage.FAIL
-                || msg.kind == IMessage.ABORT) {
-            logger.error(msg.message)
-        } else if (msg.kind == IMessage.WARNING) {
-            logger.warn(msg.message)
-        } else {
-            logger.debug(msg.message)
-        }
         this.messages.add(msg)
         return true
     }
