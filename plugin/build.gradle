@@ -5,7 +5,7 @@ version  buildNumber != null ? "1.0.$buildNumber" : '1.0-SNAPSHOT'
 buildscript {
     ext {
         kotlin_version = '1.1.1'
-        aspectjVersion = '1.8.10'
+        aspectjVersion = '1.8.9'
     }
 
     repositories {
