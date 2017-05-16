@@ -7,6 +7,6 @@ import org.aspectj.lang.annotation.Before;
 public class JavaAspect {
     @Before("@annotation(annotation) && execution(* *(..))")
     public void before(JavaAnnotation annotation) throws Throwable {
-        System.out.println("Running from " + annotation.value() + " before the execution");
+        System.out.println("Running from " + annotation.value() + "aspect BEFORE the execution");
     }
 }
