@@ -1,0 +1,28 @@
+buildscript {
+    ext {
+        kotlin_version = '1.1.1'
+        aspectjVersion = '1.8.9'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath "com.github.sedovalx.gradle:gradle-aspectj-binary:1.0.20"
+    }
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'kotlin'
+
+    sourceCompatibility = '1.7'
+
+    repositories {
+        mavenCentral()
+    }
+}
