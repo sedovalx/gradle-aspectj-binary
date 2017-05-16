@@ -9,7 +9,7 @@ doing the weaving on the weaving over already compiled classes. It is particular
   fully compatible Java bytecode. As far as I know there was a problem with Kotlin inlining in AspectJ 1.8.9, that 
    was fixed in the 1.8.10, so the later is used.
    
-**Note**: it goes without saying that the plugin works for Java sources as well.   
+> It goes without saying that the plugin works for Java sources as well.   
   
 ### Usage
 
@@ -33,6 +33,10 @@ doing the weaving on the weaving over already compiled classes. It is particular
   
   so you can just run the build and have all your aspects in the `main` source set applied.
   
+  > You need to weave both aspects and classes where aspects should be applied. So if you have aspect 
+  classes in a project A and classes to be weaved in a project B you should add the `weaveClasses` task to the build 
+  process of both projects.
+  
 ### Available configuration
   
   For now the `weaceClasses` task can be configured with two parameters
@@ -43,15 +47,5 @@ doing the weaving on the weaving over already compiled classes. It is particular
       }
       
   Provided values are passed as it is to the [ajc](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html) compiler parameters.   
-  
-### Thing to remember
-   
-  You need to weave both aspects and classes where aspects should be applied. So if you have aspect 
-  classes in a project A and classes to be weaved in a project B you should add the `weaveClasses` task to the build 
-  process of both projects.
-  
-## TODO
-  - [x] Add travis build
-  - [x] Add task to publish to Bintray
-  - [x] Release 1.0.1
+
   
