@@ -35,7 +35,7 @@ doing the weaving on the weaving over already compiled classes. It is particular
   
 ### Available configuration
   
-  For now the `weaceClasses` task can be configured two parameters
+  For now the `weaceClasses` task can be configured with two parameters
   
       weaveClasses {
         source = '1.7'  // default value
