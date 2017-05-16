@@ -39,6 +39,8 @@ doing the weaving on the weaving over already compiled classes. It is particular
         source = '1.7'  // default value
         target = '1.7'  // default value
       }
+      
+  Provided values are passed as it is to the [ajc](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html) compiler parameters.   
   
 ### Thing to remember
    
