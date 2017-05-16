@@ -44,6 +44,27 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "1"
+            name "Alexander Sedov"
+            email "sedov.alx@gmail.com"
+        }
+    }
+    
+    scm {
+       url "https://github.com/sedovalx/gradle-aspectj-binary"
+    }
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -56,6 +77,7 @@ publishing {
                 root.appendNode('description', 'Gradle AspectJ binary weaving plugin')
                 root.appendNode('name', 'Gradle AspectJ binary weaving plugin')
                 root.appendNode('url', 'https://github.com/sedovalx/gradle-aspectj-binary')
+                root.children().last() + pomConfig
             }
         }
     }
@@ -75,6 +97,9 @@ bintray {
             name = "1.0.$buildNumber"
             desc = 'Gradle AspectJ binary weaving plugin'
             released = new Date()
+            gpg {
+                sign = true
+            }
         }
     }
 
