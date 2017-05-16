@@ -2,6 +2,8 @@ buildscript {
     ext {
         kotlin_version = '1.1.1'
         aspectjVersion = '1.8.9'
+        buildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
+        pluginVersion = buildNumber != null ? "1.0.$buildNumber" : '1.0-SNAPSHOT'
     }
 
     repositories {
@@ -12,7 +14,6 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-        classpath "com.github.sedovalx.gradle:gradle-aspectj-binary:1.0.20"
     }
 }
 

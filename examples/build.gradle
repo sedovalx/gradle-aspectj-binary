@@ -1,3 +1,16 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.github.sedovalx.gradle:gradle-aspectj-binary:$pluginVersion"
+    }
+}
+
 group 'com.github.sedovalx.sandbox.gradle.aspectj.example'
 version '1.0-SNAPSHOT'
 
