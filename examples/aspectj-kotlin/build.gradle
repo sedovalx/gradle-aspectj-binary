@@ -11,7 +11,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.github.sedovalx.gradle:gradle-aspectj-binary:1.0.7"
+        classpath "com.github.sedovalx.gradle:gradle-aspectj-binary:1.0.18"
     }
 }
 
