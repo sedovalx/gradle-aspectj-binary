@@ -6,8 +6,8 @@
 Gradle plugin for AspectJ binary weaving. It works similar to https://github.com/jcabi/jcabi-maven-plugin 
 doing the weaving on the weaving over already compiled classes. It is particularly helpful if the source code
   is written in a language different from Java. For example, [Kotlin](https://kotlinlang.org), as it produces 
-  fully compatible Java bytecode. As far as I know there was a problem with Kotlin inlining in AspectJ 1.8.9, that 
-   was fixed in the 1.8.10, so the later is used.
+  fully compatible Java bytecode. The plugin uses AspectJ 1.8.9 to be compatible with Java 7, versions 1.8.10 and higher
+   requires Java 8. 
    
 > It goes without saying that the plugin works for Java sources as well.   
   
@@ -55,4 +55,13 @@ doing the weaving on the weaving over already compiled classes. It is particular
   `build/ajc.log` file and do not affect the build result. Otherwise, error or warning messages are 
   printed in the build output and ajc errors (if any) break the build process.   
 
+### Clean local build
+
+The examples project depends on a version of the plugin. In case of a clean build no plugin version exists in 
+the repository. So I use a little bit hacky way to do the trick.
+
+     $ echo "include 'plugin'" > settings.gradle
+     $ ./gradlew clean :plugin:publishMavenJavaPublicationToMavenLocal
+     $ echo "include 'plugin', 'examples'" > settings.gradle
+     $ ./gradlew :examples:run
   
