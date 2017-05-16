@@ -1,4 +1,4 @@
-group 'com.jetbrains.sandbox'
+group 'com.github.sedovalx.sandbox.gradle.aspectj.example'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -20,7 +20,7 @@ apply plugin: 'kotlin'
 apply plugin: 'application'
 apply plugin: 'com.github.sedovalx.gradle-aspectj-binary'
 
-mainClassName = "App"
+mainClassName = "com.github.sedovalx.sandbox.gradle.aspectj.example.App"
 
 sourceCompatibility = 1.7
 
