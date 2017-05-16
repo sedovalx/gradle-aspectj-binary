@@ -8,6 +8,8 @@ doing the weaving on the weaving over already compiled classes. It is particular
   is written in a language different from Java. For example, [Kotlin](https://kotlinlang.org), as it produces 
   fully compatible Java bytecode. As far as I know there was a problem with Kotlin inlining in AspectJ 1.8.9, that 
    was fixed in the 1.8.10, so the later is used.
+   
+**Note**: it goes without saying that the plugin works for Java sources as well.   
   
 ### Usage
 
