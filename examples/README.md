@@ -30,3 +30,21 @@ to see the result. Probably you will see something similar to this:
             at com.github.sedovalx.sandbox.gradle.aspectj.example.App.main(App.java:37)
    
 > You have to use AspectJ annotations to describe aspects.     
+
+You don't need all this tricky things in your application. Just add this to the build script
+
+    buildscript {
+      repositories {
+        jcenter()
+      }
+      dependencies {
+        classpath "com.github.sedovalx.gradle:gradle-aspectj-binary:$pluginVersion"
+      }
+    }
+    
+    apply plugin: 'com.github.sedovalx.gradle-aspectj-binary'
+         
+    weaveClasses.dependsOn compileJava
+    classes.dependsOn weaveClasses
+             
+to the project you want to weave during the build.             
