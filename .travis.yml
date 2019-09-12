@@ -11,11 +11,12 @@ branches:
   - master
 
 install:
+ - set -e
+ - echo "include 'plugin'" > settings.gradle
  - ./gradlew dependencies
 
 script:
  - set -e
- - echo "include 'plugin'" > settings.gradle
  - ./gradlew clean :plugin:publishMavenJavaPublicationToMavenLocal
  - echo "include 'plugin', 'examples'" > settings.gradle
  - ./gradlew :examples:run
