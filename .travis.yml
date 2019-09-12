@@ -10,4 +10,11 @@ branches:
  only:
   - master
 
-script: ./travis.sh
+install: skip
+
+script:
+ - echo "include 'plugin'" > settings.gradle
+ - ./gradlew clean :plugin:publishMavenJavaPublicationToMavenLocal
+ - echo "include 'plugin', 'examples'" > settings.gradle
+ - ./gradlew :examples:run
+ - ./gradlew bintrayUpload
