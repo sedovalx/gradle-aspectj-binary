@@ -33,7 +33,7 @@ open class AjcTask : DefaultTask() {
     fun compile() {
         logger.info("=".repeat(30))
         logger.info("=".repeat(30))
-        logger.info("Running ajc on classpath: ${getClasspath()}")
+        logger.info("Running ajc on classpath: $classpath")
 
         val tempDirectory = Paths.get(buildDir.toPath().toString(), "ajc").toFile()
         if (!tempDirectory.exists()) {
@@ -46,15 +46,15 @@ open class AjcTask : DefaultTask() {
                 "-Xset:avoidFinal=true",
                 "-Xlint:warning",
                 "-inpath",
-                sourceSet.output.classesDir.absolutePath,
+                sourceSet.output.classesDirs.joinToString(File.pathSeparator) { it.absolutePath },
                 "-sourceroots",
                 getSourceRoots(),
                 "-d",
                 tempDirectory.absolutePath,
                 "-classpath",
-                getClasspath(),
+                classpath,
                 "-aspectpath",
-                getClasspath(),
+                classpath,
                 "-source",
                 this.source,
                 "-target",
@@ -80,9 +80,10 @@ open class AjcTask : DefaultTask() {
 
         logger.debug("About to run ajc with parameters: \n${ajcParams.toList().joinToString("\t\n")}")
 
-        val currentClasspath = (Thread.currentThread().contextClassLoader as? URLClassLoader)?.urLs?.map { it.path }?.joinToString("\n")
+        val currentClasspath =
+            (Thread.currentThread().contextClassLoader as? URLClassLoader)?.urLs?.joinToString("\n") { it.path }
         if (currentClasspath != null) {
-            logger.debug("Task classpath:\n" + currentClasspath)
+            logger.debug("Task classpath:\n$currentClasspath")
         }
 
         val msgHolder = try {
@@ -93,9 +94,10 @@ open class AjcTask : DefaultTask() {
             throw GradleException("Error running task", ex)
         }
 
+        val outputDir = sourceSet.output.classesDirs.find { it.name == "java" }?.absoluteFile ?: sourceSet.output.classesDirs.first().absoluteFile
         try {
             logger.info("ajc completed, processing the temp")
-            FileUtils.copyDirectory(tempDirectory, sourceSet.output.classesDir)
+            FileUtils.copyDirectory(tempDirectory, outputDir)
             FileUtils.cleanDirectory(tempDirectory)
         } catch (ex: IOException) {
             throw GradleException("Failed to copy files and clean temp", ex)
@@ -105,7 +107,7 @@ open class AjcTask : DefaultTask() {
             logger.info("See $logPath for the Ajc log messages")
         } else {
             logger.info("ajc result: %d file(s) processed, %d pointcut(s) woven, %d error(s), %d warning(s)".format(
-                    files(sourceSet.output.classesDir).size,
+                    files(outputDir).size,
                     msgHolder.numMessages(IMessage.WEAVEINFO, false),
                     msgHolder.numMessages(IMessage.ERROR, true),
                     msgHolder.numMessages(IMessage.WARNING, false)
@@ -130,8 +132,8 @@ open class AjcTask : DefaultTask() {
      */
     private fun getSourceRoots(): String = Files.createTempDirectory("aspects").toAbsolutePath().toString()
 
-    private fun getClasspath(): String {
-        return (sourceSet.compileClasspath + sourceSet.runtimeClasspath).asPath
+    private val classpath: String by lazy {
+        (sourceSet.compileClasspath + sourceSet.runtimeClasspath).filter { it.exists() }.asPath
     }
 
     private fun IMessageHolder.logIfAny(logLevel: LogLevel, kind: IMessage.Kind, greater: Boolean) {

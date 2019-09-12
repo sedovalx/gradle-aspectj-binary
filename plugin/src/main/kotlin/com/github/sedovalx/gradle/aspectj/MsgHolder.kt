@@ -24,7 +24,7 @@ class MsgHolder : IMessageHolder {
     }
 
     override fun getUnmodifiableListView(): List<IMessage> {
-        throw UnsupportedOperationException()
+        return messages.toList()
     }
 
     override fun clearMessages() {

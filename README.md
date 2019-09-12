@@ -6,10 +6,12 @@
 Gradle plugin for AspectJ binary weaving. It works similar to https://github.com/jcabi/jcabi-maven-plugin 
 doing the weaving on the weaving over already compiled classes. It is particularly helpful if the source code
   is written in a language different from Java. For example, [Kotlin](https://kotlinlang.org), as it produces 
-  fully compatible Java bytecode. The plugin uses AspectJ 1.8.9 to be compatible with Java 7, versions 1.8.10 and higher
-   requires Java 8. 
-   
-> It goes without saying that the plugin works for Java sources as well.   
+  fully compatible Java bytecode. It goes without saying that the plugin works for Java sources as well. 
+  
+  
+  > The plugin uses AspectJ 1.8.9 to be compatible with Java 7, versions 1.8.10 and higher
+   requires Java 8. Mind that AspectJ 1.8.9 doesn't support Java 11.
+      
   
 ### Usage
 
