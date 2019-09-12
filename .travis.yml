@@ -1,6 +1,6 @@
 dist: xenial
 language: java
-jdk: oraclejdk7
+jdk: openjdk7
 sudo: false
 
 cache:
