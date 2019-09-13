@@ -9,8 +9,9 @@ doing the weaving on the weaving over already compiled classes. It is particular
   fully compatible Java bytecode. It goes without saying that the plugin works for Java sources as well. 
   
   
-  > The plugin uses AspectJ 1.8.9 to be compatible with Java 7, versions 1.8.10 and higher
-   requires Java 8. Mind that AspectJ 1.8.9 doesn't support Java 11.
+  > The plugin uses AspectJ 1.8.9 to be compatible with Java 7 bytecode, versions 1.8.10 and higher produce bytecode that
+   requires Java 8. Mind that AspectJ 1.8.9 doesn't support Java 11. Still, the plugin itself is compiled with `openjdk8` 
+   so it is required to have JDK8 to use the plugin.
       
   
 ### Usage
