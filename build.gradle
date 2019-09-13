@@ -1,7 +1,7 @@
 buildscript {
     ext {
         kotlin_version = '1.3.50'
-        aspectjVersion = '1.8.9'
+        aspectjVersion = '1.9.2'
         buildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
         pluginVersion = buildNumber != null ? "1.0.$buildNumber" : '1.0-SNAPSHOT'
     }
