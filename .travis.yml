@@ -18,6 +18,6 @@ install:
 script:
  - set -e
  - ./gradlew clean :plugin:publishMavenJavaPublicationToMavenLocal
- - echo "include 'plugin', 'examples'" > settings.gradle
- - ./gradlew :examples:run
+ - echo "include 'plugin', 'examples', 'examples:aspects', 'examples:app'" > settings.gradle
+ - ./gradlew :examples:app:run
  - ./gradlew bintrayUpload

@@ -76,6 +76,6 @@ the repository. So I use a little bit hacky way to do the trick.
 
      $ echo "include 'plugin'" > settings.gradle
      $ ./gradlew clean :plugin:publishMavenJavaPublicationToMavenLocal
-     $ echo "include 'plugin', 'examples'" > settings.gradle
+     $ echo "include 'plugin', 'examples', 'examples:aspects', 'examples:app'" > settings.gradle
      $ ./gradlew :examples:run
   
