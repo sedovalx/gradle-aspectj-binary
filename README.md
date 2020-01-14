@@ -27,8 +27,9 @@ doing the weaving on the weaving over already compiled classes. It is particular
       }
       
       apply plugin: 'com.github.sedovalx.gradle-aspectj-binary'
-      
-  `weaveClasses` task becomes available after that. It makes sense to add it as a dependency for the `classes` task
+            
+  `weaveClasses` task becomes available after that. By default, if the `java` plugin is not disabled via 
+  configuration (see below), there are pre-configured tasks dependencies:
   
       weaveClasses.dependsOn compileJava
       classes.dependsOn weaveClasses
@@ -37,19 +38,30 @@ doing the weaving on the weaving over already compiled classes. It is particular
   
   > You need to weave both aspects and classes where aspects should be applied. So if you have aspect 
   classes in a project A and classes to be weaved in a project B you should add the `weaveClasses` task to the build 
-  process of both projects.
+  process of both projects. See the `examples` project for details.
   
 ### Available configuration
   
-  For now the `weaceClasses` task can be configured with the next parameters
+  The plugins can be configured with the following parameters
   
-      weaveClasses {
-        source = '1.7'  
-        target = '1.7'  
-        writeToLog = true 
+      aspectjBinary {
+        applyJavaPlugin = true
+        weaveClasses {
+          ajcSourceSets = [project.sourceSets.main]
+          outputDir = project.file(...)
+          source = '1.7'  
+          target = '1.7'  
+          writeToLog = true
+        } 
       }
       
   Parameters:
+  - `applyJavaPlugin` should the `java` plugin be applied with the `aspectjBinary` plugin. By default, it is applied but
+  in some cases, for example Android projects, it is not desired. WARN: in this case, you **must** provide the `ajcSourceSets`
+  and the `outputDir` property values by yourself as there is no default configuration for Android projects (any help is appreciated).  
+  - `ajcSourceSets` is a set of Gradle source sets to be weaved. By default, it includes the `main` source set only. 
+  Both `compileClasspath` and `runtimeClasspath` collections are extracted from each source set.
+  - `outputDir` is a folder where the weaved classes are copied. By default, it is `build/classes/java/main`. 
   - `source` has '1.7' as default value and is passed as it is to the [ajc](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html) compiler parameter
   - `target` has '1.7' as default value and is passed as it is to the [ajc](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html) compiler parameter
   - `writeToLog` has `false` as a default value and defines if ajc's compile messages should 

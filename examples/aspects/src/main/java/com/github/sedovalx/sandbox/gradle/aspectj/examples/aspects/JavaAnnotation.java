@@ -1,4 +1,4 @@
-package com.github.sedovalx.sandbox.gradle.aspectj.example.aspects;
+package com.github.sedovalx.sandbox.gradle.aspectj.examples.aspects;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

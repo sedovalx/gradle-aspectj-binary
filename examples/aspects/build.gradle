@@ -1,0 +1,19 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "com.github.sedovalx.gradle:gradle-aspectj-binary:$pluginVersion"
+    }
+}
+
+apply plugin: 'com.github.sedovalx.gradle-aspectj-binary'
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.aspectj:aspectjrt:$aspectjVersion"
+    compile 'com.jcabi:jcabi-aspects:0.22.6'
+    compile 'org.slf4j:slf4j-simple:1.7.21'
+}

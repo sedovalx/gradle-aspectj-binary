@@ -1,7 +1,5 @@
-package com.github.sedovalx.sandbox.gradle.aspectj.example;
+package com.github.sedovalx.sandbox.gradle.aspectj.examples.aspects;
 
-import com.github.sedovalx.sandbox.gradle.aspectj.example.aspects.JavaAnnotation;
-import com.github.sedovalx.sandbox.gradle.aspectj.example.aspects.KotlinAnnotation;
 import com.jcabi.aspects.Quietly;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

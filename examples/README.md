@@ -7,7 +7,7 @@ It expects `1.0-SNAPSHOT` version of the plugin in the local Maven repository or
  
  Run
    
-    ./gradlew clean run
+    ./gradlew clean :examples:app:run
     
 to see the result. Probably you will see something similar to this:
  
@@ -21,13 +21,13 @@ to see the result. Probably you will see something similar to this:
     Hello Kotlin
     
     Jcabi aspect:
-    [main] WARN com.github.sedovalx.sandbox.gradle.aspectj.example.App - java.lang.RuntimeException: I'm very quiet
-            at com.github.sedovalx.sandbox.gradle.aspectj.example.App.jcabiExample_aroundBody2(App.java:24)
-            at com.github.sedovalx.sandbox.gradle.aspectj.example.App$AjcClosure3.run(App.java:1)
+    [main] WARN com.github.sedovalx.sandbox.gradle.aspectj.examples.aspects.App - java.lang.RuntimeException: I'm very quiet
+            at com.github.sedovalx.sandbox.gradle.aspectj.examples.aspects.App.jcabiExample_aroundBody2(App.java:24)
+            at com.github.sedovalx.sandbox.gradle.aspectj.examples.aspects.App$AjcClosure3.run(App.java:1)
             at org.aspectj.runtime.reflect.JoinPointImpl.proceed(JoinPointImpl.java:149)
             at com.jcabi.aspects.aj.QuietExceptionsLogger.wrap(QuietExceptionsLogger.java:83)
-            at com.github.sedovalx.sandbox.gradle.aspectj.example.App.jcabiExample(App.java:24)
-            at com.github.sedovalx.sandbox.gradle.aspectj.example.App.main(App.java:37)
+            at com.github.sedovalx.sandbox.gradle.aspectj.examples.aspects.App.jcabiExample(App.java:24)
+            at com.github.sedovalx.sandbox.gradle.aspectj.examples.aspects.App.main(App.java:37)
    
 > You have to use AspectJ annotations to describe aspects.     
 
@@ -43,8 +43,5 @@ You don't need all this tricky things in your application. Just add this to the 
     }
     
     apply plugin: 'com.github.sedovalx.gradle-aspectj-binary'
-         
-    weaveClasses.dependsOn compileJava
-    classes.dependsOn weaveClasses
              
 to the project you want to weave during the build.             

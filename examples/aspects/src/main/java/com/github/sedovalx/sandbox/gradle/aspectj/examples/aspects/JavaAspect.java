@@ -1,4 +1,4 @@
-package com.github.sedovalx.sandbox.gradle.aspectj.example.aspects;
+package com.github.sedovalx.sandbox.gradle.aspectj.examples.aspects;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

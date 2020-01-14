@@ -1,1 +1,1 @@
-include 'plugin', 'examples'
+include 'plugin', 'examples', 'examples:aspects', 'examples:app'
