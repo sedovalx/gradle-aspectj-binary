@@ -17,6 +17,16 @@ version '1.0-SNAPSHOT'
 apply plugin: 'application'
 apply plugin: 'com.github.sedovalx.gradle-aspectj-binary'
 
+aspectjBinary {
+    applyJavaPlugin = true
+    weaveClasses {
+        source = "1.8"
+        target = "1.8"
+        ajcSourceSets = [project.sourceSets.main]
+        writeToLog = true
+    }
+}
+
 mainClassName = "com.github.sedovalx.sandbox.gradle.aspectj.example.App"
 
 dependencies {
@@ -25,6 +35,3 @@ dependencies {
     compile 'com.jcabi:jcabi-aspects:0.22.6'
     compile 'org.slf4j:slf4j-simple:1.7.21'
 }
-
-weaveClasses.dependsOn compileJava
-classes.dependsOn weaveClasses

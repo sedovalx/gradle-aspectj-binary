@@ -7,6 +7,7 @@ import org.aspectj.bridge.IMessageHolder
 import org.aspectj.tools.ajc.Main
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.file.FileCollection
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
@@ -21,32 +22,48 @@ open class AjcTask : DefaultTask() {
         logging.captureStandardOutput(LogLevel.INFO)
     }
 
-    lateinit var sourceSet: SourceSet
-    lateinit var buildDir: File
-
     // Task properties
-    var source: String = "1.7"
-    var target: String = "1.7"
+    lateinit var sourceSets: Set<SourceSet>
+    lateinit var source: String
+    lateinit var target: String
+    var outputDir: File? = null
     var writeToLog: Boolean = false
 
     @TaskAction
     fun compile() {
-        logger.info("=".repeat(30))
-        logger.info("=".repeat(30))
-        logger.info("Running ajc on classpath: $classpath")
-
-        val tempDirectory = Paths.get(buildDir.toPath().toString(), "ajc").toFile()
+        val tempDirectory = Paths.get(project.buildDir.toPath().toString(), "ajc").toFile()
         if (!tempDirectory.exists()) {
             logger.info("Created temp folder $tempDirectory")
             tempDirectory.mkdirs()
         }
-        val logPath = Paths.get(buildDir.toPath().toString(), "ajc.log")
+        val logPath = Paths.get(project.buildDir.toPath().toString(), "ajc.log")
+
+        val inpath = sourceSets.map { it.output.classesDirs }.fold().joinToString(File.pathSeparator) { it.absolutePath }
+        val classpath = sourceSets.map { it.compileClasspath + it.runtimeClasspath }.fold().filter { it.exists() }.asPath
+        val outputDir = this.outputDir
+            ?: sourceSets.map { it.output.classesDirs }.fold().find { it.name == "java" }?.absoluteFile
+            ?: sourceSets.firstOrNull()?.output?.classesDirs?.firstOrNull()?.absoluteFile
+            ?: throw GradleException("Property outputDir for the weave task is undefined. You must either specify aspectjBinary.weaveClasses.outputDir manually or apply the java plugin")
+
+        logger.info("=".repeat(30))
+        logger.info(
+            buildString {
+                appendln("Ajc task parameters:")
+                appendln("source: $source")
+                appendln("target: $target")
+                appendln("sourceSets: ${sourceSets.map { it.name }}")
+                appendln("outputDir: $outputDir")
+                appendln("writeToLog: $writeToLog")
+                appendln("logPath: $logPath")
+            }.trimEnd('\n')
+        )
+        logger.info("=".repeat(30))
 
         val ajcParams = arrayOf(
                 "-Xset:avoidFinal=true",
                 "-Xlint:warning",
                 "-inpath",
-                sourceSet.output.classesDirs.joinToString(File.pathSeparator) { it.absolutePath },
+                inpath,
                 "-sourceroots",
                 getSourceRoots(),
                 "-d",
@@ -94,7 +111,8 @@ open class AjcTask : DefaultTask() {
             throw GradleException("Error running task", ex)
         }
 
-        val outputDir = sourceSet.output.classesDirs.find { it.name == "java" }?.absoluteFile ?: sourceSet.output.classesDirs.first().absoluteFile
+        val processedFiles = files(temporaryDir).size
+
         try {
             logger.info("ajc completed, processing the temp")
             FileUtils.copyDirectory(tempDirectory, outputDir)
@@ -107,7 +125,7 @@ open class AjcTask : DefaultTask() {
             logger.info("See $logPath for the Ajc log messages")
         } else {
             logger.info("ajc result: %d file(s) processed, %d pointcut(s) woven, %d error(s), %d warning(s)".format(
-                    files(outputDir).size,
+                    processedFiles,
                     msgHolder.numMessages(IMessage.WEAVEINFO, false),
                     msgHolder.numMessages(IMessage.ERROR, true),
                     msgHolder.numMessages(IMessage.WARNING, false)
@@ -132,14 +150,14 @@ open class AjcTask : DefaultTask() {
      */
     private fun getSourceRoots(): String = Files.createTempDirectory("aspects").toAbsolutePath().toString()
 
-    private val classpath: String by lazy {
-        (sourceSet.compileClasspath + sourceSet.runtimeClasspath).filter { it.exists() }.asPath
-    }
-
     private fun IMessageHolder.logIfAny(logLevel: LogLevel, kind: IMessage.Kind, greater: Boolean) {
         if (hasAnyMessage(kind, greater)) {
             val message = getMessages(kind, greater).joinToString("\n * ", prefix = "\n$logLevel:\n * ")
             logger.log(logLevel, message)
         }
+    }
+
+    private fun Iterable<FileCollection>.fold(): FileCollection {
+        return this.fold<FileCollection, FileCollection>(project.files()) { files, item -> files + item }
     }
 }
