@@ -28,6 +28,7 @@ open class AjcTask : DefaultTask() {
     lateinit var target: String
     var outputDir: File? = null
     var writeToLog: Boolean = false
+    var additionalAjcParams: ArrayList<String>? = null
 
     @TaskAction
     fun compile() {
@@ -55,6 +56,9 @@ open class AjcTask : DefaultTask() {
                 appendln("outputDir: $outputDir")
                 appendln("writeToLog: $writeToLog")
                 appendln("logPath: $logPath")
+                if (additionalAjcParams != null){
+                    appendln("additionalAjcParams: ${additionalAjcParams.joinToString()}")
+                }
             }.trimEnd('\n')
         )
         logger.info("=".repeat(30))
@@ -90,6 +94,9 @@ open class AjcTask : DefaultTask() {
                 "-warn:syntheticAccess",
                 "-warn:assertIdentifier"
         ).let {
+            if (additionalAjcParams != null) {
+                it.plus(additionalAjcParams)
+            }
             if (writeToLog) {
                 it.plus("-log").plus(logPath.toString()).plus("-showWeaveInfo")
             } else it
