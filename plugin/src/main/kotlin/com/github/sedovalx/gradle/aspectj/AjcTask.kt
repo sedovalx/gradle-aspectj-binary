@@ -28,7 +28,11 @@ open class AjcTask : DefaultTask() {
     lateinit var target: String
     var outputDir: File? = null
     var writeToLog: Boolean = false
+<<<<<<< HEAD
     var additionalAjcParams: ArrayList<String>? = null
+=======
+    var additionalAjcParams: Array<String>? = null
+>>>>>>> 2fad39e6cdd9d15966761dd9500a25cf018902e3
 
     @TaskAction
     fun compile() {
