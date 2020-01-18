@@ -25,7 +25,7 @@ open class WeaveClassesExtension {
     var target: String = "1.7"
     var writeToLog: Boolean = false
     var outputDir: File? = null
-    var additionalAjcParams: ArrayList<String>? = null
+    var additionalAjcParams: List<String>? = null
 }
 
 class AspectJBinaryWeavingPlugin : Plugin<Project> {
@@ -68,7 +68,7 @@ class AspectJBinaryWeavingPlugin : Plugin<Project> {
                 task.sourceSets = sourceSets
                 task.outputDir = extension.weaveClasses.outputDir
                 task.writeToLog = extension.weaveClasses.writeToLog
-                task.additionalAjcParams = extension.weaveClasses.additionalAjcParams
+                task.additionalAjcParams = extension.weaveClasses.additionalAjcParams ?: emptyList()
             }
         }
     }

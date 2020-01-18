@@ -50,7 +50,8 @@ doing the weaving on the weaving over already compiled classes. It is particular
           ajcSourceSets = [project.sourceSets.main]
           outputDir = project.file(...)
           source = '1.7'  
-          target = '1.7'  
+          target = '1.7'
+          additionalAjcParams = ['-proceedOnError']  
           writeToLog = true
         } 
       }
@@ -64,6 +65,7 @@ doing the weaving on the weaving over already compiled classes. It is particular
   - `outputDir` is a folder where the weaved classes are copied. By default, it is `build/classes/java/main`. 
   - `source` has '1.7' as default value and is passed as it is to the [ajc](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html) compiler parameter
   - `target` has '1.7' as default value and is passed as it is to the [ajc](http://www.eclipse.org/aspectj/doc/next/devguide/ajc-ref.html) compiler parameter
+  - `additionalAjcParams` allows addition of arbitrary entries to the tail of the default AJC parameters 
   - `writeToLog` has `false` as a default value and defines if ajc's compile messages should 
   affect the build process. In case of value is `true` all the messages are written in the 
   `build/ajc.log` file and do not affect the build result. Otherwise, error or warning messages are 

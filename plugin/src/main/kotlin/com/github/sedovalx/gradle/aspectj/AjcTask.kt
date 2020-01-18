@@ -24,11 +24,11 @@ open class AjcTask : DefaultTask() {
 
     // Task properties
     lateinit var sourceSets: Set<SourceSet>
+    lateinit var additionalAjcParams: List<String>
     lateinit var source: String
     lateinit var target: String
     var outputDir: File? = null
     var writeToLog: Boolean = false
-    var additionalAjcParams: ArrayList<String>? = null
 
     @TaskAction
     fun compile() {
@@ -56,9 +56,7 @@ open class AjcTask : DefaultTask() {
                 appendln("outputDir: $outputDir")
                 appendln("writeToLog: $writeToLog")
                 appendln("logPath: $logPath")
-                if (additionalAjcParams != null){
-                    appendln("additionalAjcParams: ${additionalAjcParams.joinToString()}")
-                }
+                appendln("additionalAjcParams: $additionalAjcParams")
             }.trimEnd('\n')
         )
         logger.info("=".repeat(30))
@@ -93,13 +91,10 @@ open class AjcTask : DefaultTask() {
                 "-warn:unusedImports",
                 "-warn:syntheticAccess",
                 "-warn:assertIdentifier"
-        ).let {
-            if (additionalAjcParams != null) {
-                it.plus(additionalAjcParams)
-            }
-            if (writeToLog) {
-                it.plus("-log").plus(logPath.toString()).plus("-showWeaveInfo")
-            } else it
+        ).chainIf(writeToLog) {
+            plus("-log").plus(logPath.toString()).plus("-showWeaveInfo")
+        }.chainIf(additionalAjcParams.isNotEmpty()) {
+            plus(additionalAjcParams)
         }
 
         logger.debug("About to run ajc with parameters: \n${ajcParams.toList().joinToString("\t\n")}")
@@ -166,5 +161,13 @@ open class AjcTask : DefaultTask() {
 
     private fun Iterable<FileCollection>.fold(): FileCollection {
         return this.fold<FileCollection, FileCollection>(project.files()) { files, item -> files + item }
+    }
+}
+
+fun <T> T.chainIf(condition: Boolean, body: T.() -> T): T {
+    return if (condition) {
+        body()
+    } else {
+        this
     }
 }
