@@ -8,11 +8,13 @@ doing the weaving on the weaving over already compiled classes. It is particular
   is written in a language different from Java. For example, [Kotlin](https://kotlinlang.org), as it produces 
   fully compatible Java bytecode. It goes without saying that the plugin works for Java sources as well. 
   
+### Requirements  
   
-  > The plugin uses [AspectJ 1.9.2](https://www.eclipse.org/aspectj/) for generating the bytecode. Please read there
-  about supported JDK versions. The plugin itself is compiled with `openjdk8`, so it requires JDK 8 or above to work.
+  - The plugin uses [AspectJ 1.9.2](https://www.eclipse.org/aspectj/) for generating the bytecode. Please read there
+  about supported JDK versions. 
+  - The plugin itself is compiled with `openjdk8`, so it requires JDK 8 or above to work.
+  - The plugin uses Gradle 4.9 API so you need Gradle of that version or newer
       
-  
 ### Usage
 
   Here is an example project in the `examples` folder. Basically you need to add the plugin to your build script
