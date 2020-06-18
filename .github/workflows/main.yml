@@ -23,4 +23,6 @@ jobs:
 
     # Runs a set of commands using the runners shell
     - name: Use secret
+      env: 
+        MY_SECRET_NAME: ${{ secrets.MySecret }}
       run: echo "$MY_SECRET_NAME"
