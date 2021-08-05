@@ -11,6 +11,9 @@ import org.gradle.api.file.FileCollection
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.InputDirectory
 import java.io.File
 import java.io.IOException
 import java.net.URLClassLoader
@@ -23,11 +26,17 @@ open class AjcTask : DefaultTask() {
     }
 
     // Task properties
+    @Input
     lateinit var sourceSets: Set<SourceSet>
+    @Input
     lateinit var additionalAjcParams: List<String>
+    @Input
     lateinit var source: String
+    @Input
     lateinit var target: String
+    @Optional @InputDirectory
     var outputDir: File? = null
+    @Input
     var writeToLog: Boolean = false
 
     @TaskAction
