@@ -4,8 +4,10 @@ import groovy.lang.Closure
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
 import java.io.File
 
@@ -65,10 +67,11 @@ class AspectJBinaryWeavingPlugin : Plugin<Project> {
             weaveClasses.configure { task ->
                 task.source = extension.weaveClasses.source
                 task.target = extension.weaveClasses.target
-                task.sourceSets = sourceSets
-                task.outputDir = extension.weaveClasses.outputDir
+                task.sourceSetNames = sourceSets.map { it.name }.toSet()
                 task.writeToLog = extension.weaveClasses.writeToLog
-                task.additionalAjcParams = extension.weaveClasses.additionalAjcParams ?: emptyList()
+                task.additionalAjcParams = extension.weaveClasses.additionalAjcParams.orEmpty()
+
+                task.outputDir.set(extension.weaveClasses.outputDir)
             }
         }
     }
