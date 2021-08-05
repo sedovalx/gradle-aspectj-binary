@@ -13,7 +13,8 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.Internal
 import java.io.File
 import java.io.IOException
 import java.net.URLClassLoader
@@ -26,7 +27,7 @@ open class AjcTask : DefaultTask() {
     }
 
     // Task properties
-    @Input
+    @Internal
     lateinit var sourceSets: Set<SourceSet>
     @Input
     lateinit var additionalAjcParams: List<String>
@@ -34,7 +35,7 @@ open class AjcTask : DefaultTask() {
     lateinit var source: String
     @Input
     lateinit var target: String
-    @Optional @InputDirectory
+    @Optional @OutputDirectory
     var outputDir: File? = null
     @Input
     var writeToLog: Boolean = false
