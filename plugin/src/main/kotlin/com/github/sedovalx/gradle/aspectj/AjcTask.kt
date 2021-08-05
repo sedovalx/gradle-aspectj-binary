@@ -7,28 +7,38 @@ import org.aspectj.bridge.IMessageHolder
 import org.aspectj.tools.ajc.Main
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.logging.LogLevel
-import org.gradle.api.tasks.SourceSet
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.*
 import java.io.File
 import java.io.IOException
 import java.net.URLClassLoader
 import java.nio.file.Files
 import java.nio.file.Paths
 
-open class AjcTask : DefaultTask() {
+abstract class AjcTask : DefaultTask() {
+    @get:Input
+    lateinit var sourceSetNames: Set<String>
+    @get:Input
+    lateinit var additionalAjcParams: List<String>
+    @get:Input
+    lateinit var source: String
+    @get:Input
+    lateinit var target: String
+    @get:Input
+    var writeToLog: Boolean = false
+
+    @get:OutputDirectory
+    @get:Optional
+    abstract val outputDir: DirectoryProperty
+
     init {
         logging.captureStandardOutput(LogLevel.INFO)
     }
-
-    // Task properties
-    lateinit var sourceSets: Set<SourceSet>
-    lateinit var additionalAjcParams: List<String>
-    lateinit var source: String
-    lateinit var target: String
-    var outputDir: File? = null
-    var writeToLog: Boolean = false
 
     @TaskAction
     fun compile() {
@@ -38,10 +48,12 @@ open class AjcTask : DefaultTask() {
             tempDirectory.mkdirs()
         }
         val logPath = Paths.get(project.buildDir.toPath().toString(), "ajc.log")
+        val sourceSetContainer = project.convention.getPlugin(JavaPluginConvention::class.java).sourceSets
+        val sourceSets = sourceSetNames.map { sourceSetContainer.getByName(it) }
 
         val inpath = sourceSets.map { it.output.classesDirs }.fold().joinToString(File.pathSeparator) { it.absolutePath }
         val classpath = sourceSets.map { it.compileClasspath + it.runtimeClasspath }.fold().filter { it.exists() }.asPath
-        val outputDir = this.outputDir
+        val outputDir = this.outputDir.orNull?.asFile
             ?: sourceSets.map { it.output.classesDirs }.fold().find { it.name == "java" }?.absoluteFile
             ?: sourceSets.firstOrNull()?.output?.classesDirs?.firstOrNull()?.absoluteFile
             ?: throw GradleException("Property outputDir for the weave task is undefined. You must either specify aspectjBinary.weaveClasses.outputDir manually or apply the java plugin")
@@ -49,14 +61,14 @@ open class AjcTask : DefaultTask() {
         logger.info("=".repeat(30))
         logger.info(
             buildString {
-                appendln("Ajc task parameters:")
-                appendln("source: $source")
-                appendln("target: $target")
-                appendln("sourceSets: ${sourceSets.map { it.name }}")
-                appendln("outputDir: $outputDir")
-                appendln("writeToLog: $writeToLog")
-                appendln("logPath: $logPath")
-                appendln("additionalAjcParams: $additionalAjcParams")
+                appendLine("Ajc task parameters:")
+                appendLine("source: $source")
+                appendLine("target: $target")
+                appendLine("sourceSets: ${sourceSets.map { it.name }}")
+                appendLine("outputDir: $outputDir")
+                appendLine("writeToLog: $writeToLog")
+                appendLine("logPath: $logPath")
+                appendLine("additionalAjcParams: $additionalAjcParams")
             }.trimEnd('\n')
         )
         logger.info("=".repeat(30))
