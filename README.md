@@ -1,7 +1,6 @@
 # gradle-aspectj-binary
 
-[![Build Status](https://travis-ci.org/sedovalx/gradle-aspectj-binary.svg?branch=master)](https://travis-ci.org/sedovalx/gradle-aspectj-binary)
-[ ![Download](https://api.bintray.com/packages/sedovalx/com.github.sedovalx/com.github.sedovalx.gradle-aspectj-binary/images/download.svg) ](https://bintray.com/sedovalx/com.github.sedovalx/com.github.sedovalx.gradle-aspectj-binary/_latestVersion)
+![Build status](https://github.com/sedovalx/gradle-aspectj-binary/actions/workflows/gradle.yml/badge.svg)
 
 Gradle plugin for AspectJ binary weaving. It works similar to https://github.com/jcabi/jcabi-maven-plugin 
 doing the weaving over already compiled classes. It is particularly helpful if the source code
