@@ -1,5 +1,7 @@
 # gradle-aspectj-binary
 
+**Disclamer**: I don't use this plugin in my projects anymore and currently don't plan to support it in foreseeable future. In general, it works well but a bit outdated (Gradle, AspectJ versions). Feel free to fork it and adopt for your needs.
+
 [![Build Status](https://travis-ci.org/sedovalx/gradle-aspectj-binary.svg?branch=master)](https://travis-ci.org/sedovalx/gradle-aspectj-binary)
 [ ![Download](https://api.bintray.com/packages/sedovalx/com.github.sedovalx/com.github.sedovalx.gradle-aspectj-binary/images/download.svg) ](https://bintray.com/sedovalx/com.github.sedovalx/com.github.sedovalx.gradle-aspectj-binary/_latestVersion)
 
